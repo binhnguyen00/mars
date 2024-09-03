@@ -1,4 +1,4 @@
-# mars
+# Description
 Convert image file extension into one another
 
 # Requirements
