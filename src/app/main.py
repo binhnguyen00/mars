@@ -1,4 +1,7 @@
-from ..module.server.server import run;
+from ..module.server.utils import run;
 
 if __name__ == '__main__':
-  run()
+  try:
+    run()
+  except KeyboardInterrupt:
+    pass

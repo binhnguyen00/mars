@@ -1,7 +1,7 @@
 import unittest
 import threading
 import http.client
-from src.module.server.server import run
+from src.module.server.utils import run
 
 class TestServer(unittest.TestCase):
   
@@ -13,7 +13,7 @@ class TestServer(unittest.TestCase):
     cls.server_thread.start()
 
   def test_welcome_page(self):
-    """Test the /welcome route.\n"""
+    """Test the /welcome route."""
     connection = http.client.HTTPConnection('localhost', 8000)
     connection.request('GET', '/welcome')
     response = connection.getresponse()
@@ -22,7 +22,7 @@ class TestServer(unittest.TestCase):
     self.assertIn(b'<html>', response.read())  # Assuming your index.html starts with <html>
 
   def test_root_redirect(self):
-    """Test that accessing root redirects to /welcome.\n"""
+    """Test that accessing root redirects to /welcome."""
     connection = http.client.HTTPConnection('localhost', 8000)
     connection.request('GET', '/')
     response = connection.getresponse()
@@ -31,7 +31,7 @@ class TestServer(unittest.TestCase):
     self.assertIn(b'<html>', response.read())  # Assuming your index.html starts with <html>
 
   def test_404(self):
-    """Test that a non-existent path returns 404.\n"""
+    """Test that a non-existent path returns 404."""
     connection = http.client.HTTPConnection('localhost', 8000)
     connection.request('GET', '/non-existent')
     response = connection.getresponse()
