@@ -17,3 +17,8 @@ poetry install
 poetry shell
 ```
 - For those who aren't familiar with poetry, feel free to use whatever you prefer instead.
+
+# Start Server
+```
+python -m src.app.main
+```
