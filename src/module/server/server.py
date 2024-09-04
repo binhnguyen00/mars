@@ -1,5 +1,5 @@
 import os
-import src.module.image.processor as processor
+import src.module.image.processor as ImgProcessor
 
 from flask import (Flask, request, jsonify, send_from_directory, send_file)
 from src.app.context import (ROOT_DIR, UPLOAD_FOLDER, RESULT_FOLDER)
@@ -26,10 +26,9 @@ def upload_image():
   else:
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
-    processor.process_image(UPLOAD_FOLDER, file.filename)
+    result_image = ImgProcessor.process_image(file_path, 'png') # png can be replace
+    return send_file(result_image, as_attachment=True)
 
-  result_image = os.path.join(RESULT_FOLDER, file.filename)
-  return send_file(result_image, as_attachment=True)
 
 @server.route('/get-image/<image_name>', methods=['GET'])
 def get_image(image_name):
