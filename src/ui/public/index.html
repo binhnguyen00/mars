@@ -3,61 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
   <link rel="icon" type="image/x-icon" href="assets/imgs/favicon.ico">
   <title>Mars</title>
 </head>
 
 <body>
-  <h1>Upload an Image</h1>
-
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="imageInput" name="image" accept="image/*" required>
-    <button type="submit">Upload</button>
-  </form>
-
-  <br>
-
-  <div>
-    <img id="resultImage" src="" style="display:none; width: 300px; height: 300px">
-    <a id="downloadLink" href="#" download style="display:none;">Download</a>
-  </div>
-
-  <script>
-    document.getElementById('uploadForm').onsubmit = async function(event) {
-      event.preventDefault();
-
-      const formData = new FormData();
-      const imageFile = document.getElementById('imageInput').files[0];
-      formData.append('image', imageFile);
-
-      try {
-        const response = await fetch('/upload-image', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
-
-          const resultImage = document.getElementById('resultImage');
-          resultImage.src = url;
-          resultImage.style.display = 'block';
-
-          const downloadLink = document.getElementById('downloadLink');
-          downloadLink.style.display = 'block';
-          downloadLink.href = url;
-          downloadLink.download = imageFile.name.replace(/\.[^/.]+$/, "") + "_processed" + getFileExtension(imageFile.name);
-        } else {
-          const error = await response.json();
-          alert('Error: ' + error.error);
-        }
-      } catch (err) {
-        console.error('Error:', err);
-      }
-    }
-  </script>
-
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

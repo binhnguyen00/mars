@@ -2,5 +2,8 @@
 .venv
 __pycache__
 **.lock
-
+node_modules
+dist
+build
+pnpm-lock.yaml
 src/module/image/resources
