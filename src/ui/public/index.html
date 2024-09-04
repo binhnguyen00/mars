@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mars</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="stylesheet.css" />
 </head>
 <body>
-  <h1>Wellcome to Mars</h1>
+  <h1>Upload an Image</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="image" name="image" accept="image/*" required>
+    <button type="submit">Upload</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData();
+      const imageFile = document.getElementById('image').files[0];
+      formData.append('image', imageFile);
+
+      try {
+        const response = await fetch('http://localhost:5000/upload-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        document.getElementById('status').innerText = result.message;
+      } catch (error) {
+        document.getElementById('status').innerText = 'Error uploading image';
+      }
+    });
+  </script>
 </body>
 </html>

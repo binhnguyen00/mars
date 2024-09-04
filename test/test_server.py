@@ -1,44 +1,31 @@
+import os
 import unittest
-import threading
-import http.client
-from src.module.server.utils import run
+import requests
+
+from src.module.server.server import run
 
 class TestServer(unittest.TestCase):
-  
+
   @classmethod
   def setUpClass(cls):
-    # Start the server in a separate thread
-    cls.server_thread = threading.Thread(target=run)
-    cls.server_thread.setDaemon(True)
-    cls.server_thread.start()
+    run(debug=True, host='localhost', port=5001) # Start the server before tests run
 
-  def test_welcome_page(self):
-    """Test the /welcome route."""
-    connection = http.client.HTTPConnection('localhost', 8000)
-    connection.request('GET', '/welcome')
-    response = connection.getresponse()
-    
-    self.assertEqual(response.status, 200)
-    self.assertIn(b'<html>', response.read())  # Assuming your index.html starts with <html>
+  def test_server_is_running(self): 
+    response = requests.get('http://localhost:5001/')
+    self.assertEqual(response.status_code, 200)
 
-  def test_root_redirect(self):
-    """Test that accessing root redirects to /welcome."""
-    connection = http.client.HTTPConnection('localhost', 8000)
-    connection.request('GET', '/')
-    response = connection.getresponse()
-    
-    self.assertEqual(response.status, 200)
-    self.assertIn(b'<html>', response.read())  # Assuming your index.html starts with <html>
+  def test_upload_image(self):
+    image_path = os.path.join(os.path.dirname(__file__), 'resources', 'doge.jpg')
+    self.assertTrue(os.path.exists(image_path), "Test image does not exist")
 
-  def test_404(self):
-    """Test that a non-existent path returns 404."""
-    connection = http.client.HTTPConnection('localhost', 8000)
-    connection.request('GET', '/non-existent')
-    response = connection.getresponse()
-    
-    self.assertEqual(response.status, 404)
-    self.assertIn(b'404 Not Found', response.read())
+    files = {'image': open(image_path, 'rb')}
+    response = requests.post('http://localhost:5001/upload-image', files=files)
+    files['image'].close()
+    self.assertEqual(response.status_code, 200)
+    self.assertIn('Image uploaded successfully', response.json()['message'])
 
+    saved_file_path = response.json()['file_path']
+    self.assertTrue(os.path.exists(saved_file_path), f"File was not saved: {saved_file_path}")
 
 if __name__ == '__main__':
   unittest.main()
