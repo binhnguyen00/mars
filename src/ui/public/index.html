@@ -8,31 +8,54 @@
 </head>
 <body>
   <h1>Upload an Image</h1>
+
   <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="image" name="image" accept="image/*" required>
+    <input type="file" id="imageInput" name="image" accept="image/*" required>
     <button type="submit">Upload</button>
   </form>
-  <p id="status"></p>
+
+  <br>
+
+  <div style="width: 300px; height: 300px">
+    <img id="resultImage" src="" style="display:none;">
+    <a id="downloadLink" href="#" download style="display:none;">Download</a>
+  </div>
 
   <script>
-    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+    document.getElementById('uploadForm').onsubmit = async function(event) {
       event.preventDefault();
+
       const formData = new FormData();
-      const imageFile = document.getElementById('image').files[0];
+      const imageFile = document.getElementById('imageInput').files[0];
       formData.append('image', imageFile);
 
       try {
-        const response = await fetch('http://localhost:5000/upload-image', {
+        const response = await fetch('/upload-image', {
           method: 'POST',
-          body: formData
+          body: formData,
         });
 
-        const result = await response.json();
-        document.getElementById('status').innerText = result.message;
-      } catch (error) {
-        document.getElementById('status').innerText = 'Error uploading image';
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+
+          const resultImage = document.getElementById('resultImage');
+          resultImage.src = url;
+          resultImage.style.display = 'block';
+
+          const downloadLink = document.getElementById('downloadLink');
+          downloadLink.style.display = 'block';
+          downloadLink.href = url;
+          downloadLink.download = imageFile.name.replace(/\.[^/.]+$/, "") + "_processed" + getFileExtension(imageFile.name);
+        } else {
+          const error = await response.json();
+          alert('Error: ' + error.error);
+        }
+      } catch (err) {
+        console.error('Error:', err);
       }
-    });
+    }
   </script>
+
 </body>
 </html>
