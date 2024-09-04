@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "mars"
 version = "0.1.0"
-description = "Convert image file extension into one another"
+description = "Convert image file extensions from one type to another"
 authors = ["binhnguyen00 <jackjack2000.kahp@gmail.com>"]
 license = "GNU"
 readme = "README.md"

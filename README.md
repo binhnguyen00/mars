@@ -1,5 +1,5 @@
 # Description
-Convert image file extension into one another
+Convert image file extensions from one type to another.
 
 # Requirements
 - Poetry
