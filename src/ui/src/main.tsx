@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { UIHome } from "home/UIHome";
+import { UIHome } from "@/home/UIHome";
 
 function ensureRoot(): HTMLElement {
   let root = document.getElementById("root") as any;
