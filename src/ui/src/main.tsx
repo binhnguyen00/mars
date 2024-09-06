@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 import { UIHome } from "@/home/UIHome";
 
 import "@/scss/stylesheet.scss";
-import "@picocss/pico/css/pico.css";
+import "@picocss/pico/css/pico.min.css";
+import "@picocss/pico/css/pico.colors.min.css";
 
 function ensureRoot(): HTMLElement {
   let root = document.getElementById("root") as any;

@@ -26,9 +26,10 @@ def upload_image():
       'error': 'No selected file'
     }), 400
   else:
+    format = request.form.get('format') or 'PNG'
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
-    result_image = ImgProcessor.process_image(file_path, 'png') # png can be replace
+    result_image = ImgProcessor.process_image(file_path, format)
     response = send_file(result_image, as_attachment=True)
     return response
 

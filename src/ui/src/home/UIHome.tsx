@@ -27,6 +27,7 @@ export function UIHome() {
 
     const formData = new FormData();
     formData.append('image', imageFile);
+    formData.append('format', "JPEG");
 
     try {
       const response = await restful.POST('/upload-image', formData);
@@ -38,7 +39,7 @@ export function UIHome() {
       const url = URL.createObjectURL(blob);
       setResultImageUrl(url);
 
-      const processedFileName = imageFile.name.replace(/\.[^/.]+$/, "") + "_processed" + getFileExtension(imageFile.name);
+      const processedFileName = imageFile.name.replace(/\.[^/.]+$/, "") + "_processed";
       setDownloadFileName(processedFileName);
     } catch (err: any) {
       setError(`Upload failed: ${err.message}`);
@@ -59,26 +60,68 @@ export function UIHome() {
   };
 
   return (
-    <div>
-      <h1> Upload Image </h1>
+    <React.Fragment>
+      
+      <header>
+        <hgroup style={{ margin: 0 }}>
+          <h1> Image Converter </h1>
+          <p>Easily convert your images to different file formats.</p>
+        </hgroup>
+      </header>
 
-      <div>
-        <input type="file" id="image" name="image" accept="image/*" required />
-        <button onClick={upload} disabled={loading}>
+      <hr />
+      
+      <main style={{ flexGrow: 1 }}>
+        <div>
+          <label htmlFor="image"> Select an image file </label>
+          <input type="file" id="image" name="image" accept="image/*" required/>
+        </div>
+        <div className="grid">
+          <div>
+            <label htmlFor="input-formart"> Input file format </label>
+            <input name="input-formart" value={""} disabled/>
+          </div>
+          <div>
+            <label htmlFor="select-format"> New file format </label>
+            <select name="select-format" aria-label="Select new file format" required>
+              <option selected disabled value=""> Select new format </option>
+              <option>PNG</option>
+              <option>JPG</option>
+              <option>JPEG</option>
+            </select>
+          </div>
+        </div>
+        <button onClick={upload} disabled={loading} className="outline">
           {loading ? "Uploading..." : "Upload"}
         </button>
-      </div>
 
-      <br />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {resultImageUrl && (
-        <div className="flex-v" style={{ width: "300px", height: "300px" }}>
-          <img id="resultImage" src={resultImageUrl} alt="Processed" />
-          <button onClick={downloadFile}>Download</button>
+        <div className="flex-v">
+          <label htmlFor="resultImage"> Converted Image </label>
+          {resultImageUrl ? (
+            <img 
+              id="resultImage" alt="Processed" src={resultImageUrl} 
+              width={"100%"} height={"auto"}
+            />
+          ) : (
+            <img 
+              id="resultImage" alt="Processed" src={"../../assets/imgs/placeholder.svg"} 
+              width={"100%"} height={"auto"}
+            />
+          )}
+          {resultImageUrl && (
+            <button onClick={downloadFile}>Download</button>
+          )}
         </div>
-      )}
-    </div>
+      </main>
+
+      <hr />
+
+      <footer>
+        <p>In Development</p>
+      </footer>
+
+    </React.Fragment>
   );
 }

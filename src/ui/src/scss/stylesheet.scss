@@ -1,8 +1,41 @@
-@import "font";
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:100,200,300,400');
 
-body {
+/* Make sure html, body, and #root fill the entire viewport height */
+html, body, #root {
+  height: 100%;
   margin: 0;
   padding: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5em;
+  margin-right: 5em;
+}
+
+header {
+  top: 0;
+}
+
+footer {
+  bottom: 0;
+}
+
+header, footer {
+  position: sticky;
+}
+
+hgroup {
+  text-align: center;
+  margin: 0;
+}
+
+.container {
+  flex-grow: 1; /* This makes the main content fill the available space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Optionally center the content vertically */
 }
 
 .flex-v {
@@ -15,4 +48,5 @@ body {
   display: flex;
   flex-direction: row !important;
   justify-content: flex-start;
+  gap: 0.5em;
 }
