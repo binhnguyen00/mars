@@ -1,4 +1,5 @@
 import React from "react";
+import { restful } from "@/server/RESTful"
 
 export function UIHome() {
 
@@ -9,16 +10,15 @@ export function UIHome() {
 
   const upload = async (event: React.MouseEvent) => {
     event.preventDefault();
-    const formData = new FormData();
     const imageFile = (document.getElementById('image') as HTMLInputElement).files[0];
+    const formData = new FormData();
     formData.append('image', imageFile);
 
     try {
-      const response = await fetch('/upload-image', {
-        method: 'POST',
-        body: formData
-      });
-      if (response.ok) {
+      const response = await restful.POST('/upload-image', formData);
+      if (!response.ok) {
+        alert(new Error(response.statusText));
+      } else {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
 
@@ -30,11 +30,8 @@ export function UIHome() {
         downloadLink.style.display = 'block';
         downloadLink.href = url;
         downloadLink.download = imageFile.name.replace(/\.[^/.]+$/, "") + "_processed" + getFileExtension(imageFile.name);
-      } else {
-        const error = await response.json();
-        alert('Error: ' + error.error);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error:', err);
     }
   }
