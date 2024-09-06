@@ -1,11 +1,3 @@
-import React from "react";
-
-type ServerResponse = {
-  status: number;
-  image: any;
-  message
-}
-
 class RESTful {
   serverUrl: string;
 
