@@ -1,24 +1,28 @@
 import React from "react";
-
-const UIImageConverter = React.lazy(() => import("@/image/UIImageConverter"));
-// more UI lazy load
+import { UIImageConverter } from "@/container/UIImageConverter";
+import { UIArchiveConverter } from "@/container/UIArchiveConverter";
 
 export function UIHome() {
-  const [ container, setContainer ] = React.useState<React.ReactElement>(<UIImageConverter/>);
+  const startPage = <UIImageConverter/>;
+  const [ container, setContainer ] = React.useState(startPage);
 
   const renderContainer = React.useCallback(() => {
-    return container;
+    return (container);
   }, [container]);
 
   return(
     <React.Fragment>
       <header>
-        <hgroup style={{ margin: 0 }}>
-          <h1> Image Converter </h1>
-          <p>Easily convert your images to different file formats.</p>
-        </hgroup>
-        <hr />
+        <div className="flex-h">
+          <h1 className="clickable"> Media Converter </h1>
+          <div className="flex-h">
+            <div className="clickable" onClick={() => setContainer(<UIImageConverter/>)}>Image</div>
+            <div className="clickable" onClick={() => setContainer(<UIArchiveConverter/>)}>Archive</div>
+          </div>
+        </div>
+        <hr style={{ margin: 0 }}/>
       </header>
+      <br />
 
       {renderContainer()}
 

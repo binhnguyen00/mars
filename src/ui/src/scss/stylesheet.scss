@@ -13,9 +13,19 @@ html, body, #root {
   flex-direction: column;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+}
+
 header {
   top: 0;
   position: sticky;
+}
+
+main {
+  flex-grow: 1;
 }
 
 footer {
@@ -48,6 +58,25 @@ hgroup {
 .flex-h {
   display: flex;
   flex-direction: row !important;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 0.5em;
+}
+
+.clickable {
+  color: #007bff;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.p-1 {
+  padding: 1em;
+}
+
+.m-1 {
+  margin: 1em;
 }

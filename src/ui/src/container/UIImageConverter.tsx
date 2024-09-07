@@ -1,7 +1,7 @@
 import React from "react";
 import { restful } from "@/server/RESTful";
 
-function UIImageConverter() {
+export function UIImageConverter() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [resultImageUrl, setResultImageUrl] = React.useState<string | null>(null);
@@ -66,7 +66,12 @@ function UIImageConverter() {
   };
 
   return (
-    <main style={{ flexGrow: 1 }}>
+    <main>
+      <div style={{ textAlign: "center" }}>
+        <h4 style={{ margin: "auto" }}> Image Converter </h4>
+        <p>Easily convert your image to different file formats.</p>
+      </div>
+
       <div>
         <label> Select an image file </label>
         <input type="file" id="image" accept="image/*" required onInput={() => {
@@ -120,5 +125,3 @@ function UIImageConverter() {
     </main>
   );
 }
-
-export default UIImageConverter;
