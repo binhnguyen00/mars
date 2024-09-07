@@ -1,6 +1,6 @@
 import React from "react";
 
-export function UIArchiveConverter() {
+function UIArchiveConverter() {
   return (
     <main>
       <div style={{ textAlign: "center" }}>
@@ -10,3 +10,5 @@ export function UIArchiveConverter() {
     </main>
   )
 }
+
+export default UIArchiveConverter;

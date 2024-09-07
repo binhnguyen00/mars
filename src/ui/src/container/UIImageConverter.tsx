@@ -1,7 +1,7 @@
 import React from "react";
 import { restful } from "@/server/RESTful";
 
-export function UIImageConverter() {
+function UIImageConverter() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [resultImageUrl, setResultImageUrl] = React.useState<string | null>(null);
@@ -98,10 +98,13 @@ export function UIImageConverter() {
             <option value={"JPEG"}>JPEG</option>
           </select>
         </div>
+        <div>
+          <label className="hide"> Buy me a coffee </label>
+          <button onClick={upload} disabled={loading} className="outline max-width">
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+        </div>
       </div>
-      <button onClick={upload} disabled={loading} className="outline">
-        {loading ? "Uploading..." : "Upload"}
-      </button>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -125,3 +128,5 @@ export function UIImageConverter() {
     </main>
   );
 }
+
+export default UIImageConverter;

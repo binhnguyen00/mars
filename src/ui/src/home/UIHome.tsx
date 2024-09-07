@@ -1,6 +1,7 @@
 import React from "react";
-import { UIImageConverter } from "@/container/UIImageConverter";
-import { UIArchiveConverter } from "@/container/UIArchiveConverter";
+
+const UIImageConverter = React.lazy(() => import("@/container/UIImageConverter"));
+const UIArchiveConverter = React.lazy(() => import("@/container/UIArchiveConverter"));
 
 export function UIHome() {
   const startPage = <UIImageConverter/>;
@@ -24,7 +25,9 @@ export function UIHome() {
       </header>
       <br />
 
-      {renderContainer()}
+      <React.Suspense>
+        {renderContainer()}
+      </React.Suspense>
 
       <footer>
         <hr />
