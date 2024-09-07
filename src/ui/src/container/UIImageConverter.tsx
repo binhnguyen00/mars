@@ -19,6 +19,16 @@ function UIImageConverter() {
     return fileInput || null;
   };
 
+  const renderTargetImageExt = () => {
+    let exts = ["PNG", "JPG", "JPEG"];
+    const options: any[] = exts.map(ext => {
+      return (
+        <option value={ext}> {ext} </option>
+      )
+    })
+    return options;
+  }
+
   const upload = async (event: React.MouseEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -93,9 +103,7 @@ function UIImageConverter() {
             setTargetImageExt(event.target.value);
           }}>
             <option disabled> Select new format </option>
-            <option value={"PNG"}>PNG</option>
-            <option value={"JPG"}>JPG</option>
-            <option value={"JPEG"}>JPEG</option>
+            {renderTargetImageExt()}
           </select>
         </div>
         <div>
