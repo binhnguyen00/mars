@@ -73,9 +73,9 @@ export function UIHome() {
           <h1> Image Converter </h1>
           <p>Easily convert your images to different file formats.</p>
         </hgroup>
+        <hr />
       </header>
 
-      <hr />
       
       <main style={{ flexGrow: 1 }}>
         <div>
@@ -110,7 +110,7 @@ export function UIHome() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <div className="flex-v">
-          <label htmlFor="resultImage"> Your Image </label>
+          <h4 style={{ textAlign: 'center' }}> Your Converted Image </h4>
           {resultImageUrl ? (
             <img 
               id="resultImage" alt="Processed" src={resultImageUrl} 
@@ -128,9 +128,9 @@ export function UIHome() {
         </div>
       </main>
 
-      <hr />
 
       <footer>
+        <hr />
         <p>In Development</p>
       </footer>
 

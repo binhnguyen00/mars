@@ -3,15 +3,14 @@
 /* Make sure html, body, and #root fill the entire viewport height */
 html, body, #root {
   height: 100%;
-  margin: 0;
   padding: 0;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 #root {
   display: flex;
   flex-direction: column;
-  margin-left: 5em;
-  margin-right: 5em;
 }
 
 header {
@@ -24,6 +23,8 @@ footer {
 
 header, footer {
   position: sticky;
+  z-index: 999;
+  background-color: white;
 }
 
 hgroup {
