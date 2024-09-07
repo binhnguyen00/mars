@@ -15,6 +15,7 @@ html, body, #root {
 
 header {
   top: 0;
+  position: sticky;
 }
 
 footer {
@@ -22,7 +23,6 @@ footer {
 }
 
 header, footer {
-  position: sticky;
   z-index: 999;
   background-color: white;
 }
