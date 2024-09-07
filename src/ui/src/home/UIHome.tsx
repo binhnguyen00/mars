@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactEventHandler } from "react";
 import { restful } from "@/server/RESTful";
 
 export function UIHome() {
@@ -6,7 +6,8 @@ export function UIHome() {
   const [error, setError] = React.useState<string | null>(null);
   const [resultImageUrl, setResultImageUrl] = React.useState<string | null>(null);
   const [downloadFileName, setDownloadFileName] = React.useState<string | null>(null);
-  const [imageExtension, setImageExtension] = React.useState<string>("");
+  const [orgImageExt, setOrgImageExt] = React.useState<string>("");
+  const [targetImageExt, setTargetImageExt] = React.useState<string>("");
 
   const getFileExtension = (fileName: string) => {
     const extension = fileName.split('.').pop();
@@ -17,6 +18,11 @@ export function UIHome() {
     const fileInput = (document.getElementById('image') as HTMLInputElement).files?.[0];
     return fileInput || null;
   };
+
+  const setFormat = (format: string) => {
+    console.log(format);
+    setTargetImageExt(format);
+  }
 
   const upload = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -31,12 +37,11 @@ export function UIHome() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('image', imageFile);
-    formData.append('format', "JPEG");
-
+    const body = new FormData();
+    body.append("image", imageFile);
+    body.append("format", targetImageExt);
     try {
-      const response = await restful.POST('/upload-image', formData);
+      const response = await restful.POST('/upload-image', body);
       if (!response.ok) {
         throw new Error(response.statusText);
       }
@@ -79,27 +84,29 @@ export function UIHome() {
       
       <main style={{ flexGrow: 1 }}>
         <div>
-          <label htmlFor="image"> Select an image file </label>
-          <input type="file" id="image" name="image" accept="image/*" required onInput={() => {
+          <label> Select an image file </label>
+          <input type="file" id="image" accept="image/*" required onInput={() => {
             const imageFile = getImageInputFile();
             if (imageFile) {
               const extension = getFileExtension(imageFile.name);
-              setImageExtension(extension);
+              setOrgImageExt(extension);
             }
           }}/>
         </div>
         <div className="grid">
           <div>
             <label htmlFor="input-formart"> Input file format </label>
-            <input name="input-formart" value={imageExtension.toUpperCase()} disabled/>
+            <input name="input-formart" value={orgImageExt.toUpperCase()} disabled/>
           </div>
           <div>
-            <label htmlFor="select-format"> New file format </label>
-            <select name="select-format" aria-label="Select new file format" required>
-              <option selected disabled value=""> Select new format </option>
-              <option>PNG</option>
-              <option>JPG</option>
-              <option>JPEG</option>
+            <label> New file format </label>
+            <select required defaultValue={"Select new format"} onChange={(event) => {
+              setTargetImageExt(event.target.value);
+            }}>
+              <option disabled> Select new format </option>
+              <option value={"PNG"}>PNG</option>
+              <option value={"JPG"}>JPG</option>
+              <option value={"JPEG"}>JPEG</option>
             </select>
           </div>
         </div>
