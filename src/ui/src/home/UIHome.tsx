@@ -6,10 +6,16 @@ export function UIHome() {
   const [error, setError] = React.useState<string | null>(null);
   const [resultImageUrl, setResultImageUrl] = React.useState<string | null>(null);
   const [downloadFileName, setDownloadFileName] = React.useState<string | null>(null);
+  const [imageExtension, setImageExtension] = React.useState<string>("");
 
   const getFileExtension = (fileName: string) => {
     const extension = fileName.split('.').pop();
-    return extension ? `.${extension}` : '';
+    return extension || "";
+  };
+
+  const getImageInputFile = () => {
+    const fileInput = (document.getElementById('image') as HTMLInputElement).files?.[0];
+    return fileInput || null;
   };
 
   const upload = async (event: React.MouseEvent) => {
@@ -18,7 +24,7 @@ export function UIHome() {
     setError(null); // Reset any previous errors
     setResultImageUrl(null); // Reset the result image
 
-    const imageFile = (document.getElementById('image') as HTMLInputElement).files?.[0];
+    const imageFile = getImageInputFile();
     if (!imageFile) {
       setError("Please select an image file.");
       setLoading(false);
@@ -74,12 +80,18 @@ export function UIHome() {
       <main style={{ flexGrow: 1 }}>
         <div>
           <label htmlFor="image"> Select an image file </label>
-          <input type="file" id="image" name="image" accept="image/*" required/>
+          <input type="file" id="image" name="image" accept="image/*" required onInput={() => {
+            const imageFile = getImageInputFile();
+            if (imageFile) {
+              const extension = getFileExtension(imageFile.name);
+              setImageExtension(extension);
+            }
+          }}/>
         </div>
         <div className="grid">
           <div>
             <label htmlFor="input-formart"> Input file format </label>
-            <input name="input-formart" value={""} disabled/>
+            <input name="input-formart" value={imageExtension.toUpperCase()} disabled/>
           </div>
           <div>
             <label htmlFor="select-format"> New file format </label>
@@ -98,7 +110,7 @@ export function UIHome() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <div className="flex-v">
-          <label htmlFor="resultImage"> Converted Image </label>
+          <label htmlFor="resultImage"> Your Image </label>
           {resultImageUrl ? (
             <img 
               id="resultImage" alt="Processed" src={resultImageUrl} 
@@ -107,7 +119,7 @@ export function UIHome() {
           ) : (
             <img 
               id="resultImage" alt="Processed" src={"../../assets/imgs/placeholder.svg"} 
-              width={"100%"} height={"auto"}
+              width={"auto"} height={"auto"}
             />
           )}
           {resultImageUrl && (
