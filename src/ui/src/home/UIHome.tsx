@@ -14,7 +14,7 @@ export function UIHome() {
     <React.Fragment>
       <header>
         <div className="flex-h">
-          <h1 className="clickable"> Media Converter </h1>
+          <h1 className="clickable" style={{ color: "orangered" }}> Mars Converter </h1>
           <div className="flex-h">
             <div className="clickable" onClick={() => setContainer(<UIImageConverter/>)}>Image</div>
             <div className="clickable" onClick={() => setContainer(<UIArchiveConverter/>)}>Archive</div>
