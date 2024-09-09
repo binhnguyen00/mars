@@ -26,7 +26,7 @@ export function UIHome() {
             <div className="clickable" onClick={() => setContainer(<UIArchiveConverter/>)}>Archive</div>
           </div>
         </div>
-        <hr style={{ margin: 0 }}/>
+        <hr style={{ margin: 0, padding: 0 }}/>
       </header>
       <br />
 

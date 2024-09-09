@@ -2,13 +2,13 @@ import os
 import unittest
 import requests
 
-from src.module.server.server import run
+from server.service import run_server
 
 class TestServer(unittest.TestCase):
 
   @classmethod
   def setUpClass(cls):
-    run(debug=True, host='localhost', port=5001) # Start the server before tests run
+    run_server(debug=True, host='localhost', port=5001) # Start the server before tests run
 
   def test_server_is_running(self): 
     response = requests.get('http://localhost:5001/')

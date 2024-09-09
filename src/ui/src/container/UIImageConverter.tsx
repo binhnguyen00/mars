@@ -23,7 +23,7 @@ function UIImageConverter() {
     let exts = ["PNG", "JPG", "JPEG"];
     const options: any[] = exts.map(ext => {
       return (
-        <option value={ext}> {ext} </option>
+        <option key={`ext-opt-${ext}`} value={ext}> {ext} </option>
       )
     })
     return options;
@@ -82,16 +82,13 @@ function UIImageConverter() {
         <p>Easily convert your image to different file formats.</p>
       </div>
 
-      <div>
-        <label> Select an image file </label>
-        <input type="file" id="image" accept="image/*" required onInput={() => {
-          const imageFile = getImageInputFile();
-          if (imageFile) {
-            const extension = getFileExtension(imageFile.name);
-            setOrgImageExt(extension);
-          }
-        }}/>
-      </div>
+      <input type="file" id="image" accept="image/*" required onInput={() => {
+        const imageFile = getImageInputFile();
+        if (imageFile) {
+          const extension = getFileExtension(imageFile.name);
+          setOrgImageExt(extension);
+        }
+      }}/>
       <div className="grid">
         <div>
           <label htmlFor="input-formart"> Input file format </label>

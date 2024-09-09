@@ -1,4 +1,4 @@
-from src.module.server.server import run
+from src.module.server.service import run_server
 
 if __name__ == '__main__':
-  run(debug=True, host='localhost', port=5000)
+  run_server(debug=True, host='localhost', port=5000)
