@@ -4,6 +4,7 @@ import src.module.image.processor as ImgProcessor;
 from flask import (Request, jsonify, send_file);
 from src.app.context import (UPLOAD_FOLDER, RESULT_FOLDER);
 from src.module.server.controlller import server;
+from src.module.database.db import db;
 
 def upload_image(request: Request):
   if 'image' not in request.files:
@@ -29,5 +30,7 @@ def get_image(image_name):
   print(directory)
   return send_file(directory, as_attachment=True)
 
-def run_server(debug=True, host='0.0.0.0', port=5000):
+def run_server(debug=False, host='0.0.0.0', port=5000):
+  ImgProcessor.create_result_folder()
+  ImgProcessor.create_storing_folder()
   server.run(debug=debug, host=host, port=port)

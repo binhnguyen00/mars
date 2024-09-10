@@ -1,10 +1,7 @@
 import src.module.server.service as ServerService;
 
-from flask import (Flask, request);
-from flask_cors import CORS;
-
-server = Flask(__name__)
-CORS(server)
+from flask import request;
+from src.module.server.initial import server;
 
 @server.route('/upload-image', methods=['POST'])
 def upload_image():
