@@ -1,7 +1,7 @@
 flask:
   sqlalchemy:
     username: mars
-    password: mars@123
+    password: mars123
     host: localhost
     port: 5432
     dbname: marsdb
