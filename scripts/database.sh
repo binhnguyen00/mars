@@ -11,13 +11,17 @@ function init_db() {
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "DROP DATABASE IF EXISTS $DB_NAME"
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "CREATE DATABASE $DB_NAME"
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER"
-  PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "aal  $DB_NAME OWNER TO $DB_USER"
+  PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "ALTER DATABASE $DB_NAME OWNER TO $DB_USER"
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "ALTER SCHEMA public OWNER TO $DB_USER"
 }
 
 function init_user() {
-  check_psql
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD'"
+}
+
+function initial() {
+  init_user
+  init_db
 }
 
 function dump() {
@@ -81,6 +85,8 @@ Initial Database
 Initial Admin User
   ./database.sh initial-user
   
+Initial Admin User & Database
+  ./database.sh initial
   """
 }
 
@@ -89,7 +95,7 @@ if [ -n "$COMMAND" ]; then
   shift
 else
   echo "No command provided. Showing help..."
-  showHelp
+  show_help
   exit 1
 fi
 
@@ -101,6 +107,8 @@ elif [ "$COMMAND" = "initial-db" ] ; then
   init_db
 elif [ "$COMMAND" = "initial-user" ] ; then
   init_user
+elif [ "$COMMAND" = "initial" ] ; then
+  initial
 elif [ "$COMMAND" = "help" ] ; then
   show_help
 else
