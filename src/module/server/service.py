@@ -2,7 +2,7 @@ import os;
 import src.module.image.processor as ImgProcessor;
 
 from flask import (Request, jsonify, send_file);
-from src.app.context import (UPLOAD_DIR, RESULT_DIR);
+from src.app.context import (IMG_UPLOAD_DIR, IMG_RESULT_DIR);
 from src.module.database.db import db;
 from src.module.server.initial import server;
 
@@ -19,14 +19,14 @@ def upload_image(request: Request):
     }), 400
   else:
     format = request.form.get('format') or 'PNG'
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    file_path = os.path.join(IMG_UPLOAD_DIR, file.filename)
     file.save(file_path)
     result_image = ImgProcessor.process_image(file_path, format)
     response = send_file(result_image, as_attachment=True)
     return response
 
 def get_image(image_name):
-  directory = os.path.join(RESULT_DIR, image_name)
+  directory = os.path.join(IMG_RESULT_DIR, image_name)
   print(directory)
   return send_file(directory, as_attachment=True)
 
