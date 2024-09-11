@@ -3,8 +3,8 @@ import src.module.image.processor as ImgProcessor;
 
 from flask import (Request, jsonify, send_file);
 from src.app.context import (UPLOAD_FOLDER, RESULT_FOLDER);
-from src.module.server.controlller import server;
 from src.module.database.db import db;
+from src.module.server.initial import server;
 
 def upload_image(request: Request):
   if 'image' not in request.files:
