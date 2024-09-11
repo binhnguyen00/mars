@@ -1,6 +1,6 @@
 import os
-from PIL import Image
 
+from PIL import Image
 from src.app.context import (RESULT_FOLDER, UPLOAD_FOLDER)
 
 def create_result_folder():

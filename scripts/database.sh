@@ -1,16 +1,11 @@
 # Ensure database env
 if [ ! -f "$CURRENT_DIR/common/database-env.sh" ]; then 
   cp ./common/database-env.sh.sample ./common/database-env.sh
+  check_psql
 fi
 
 source ./common/utils.sh
 source ./common/database-env.sh
-
-# Check if psql is available
-if ! command -v psql > /dev/null 2>&1; then
-  echo "psql is not available. Please install PostgreSQL client utilities."
-  exit 1
-fi
 
 function init_db() {
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "DROP DATABASE IF EXISTS $DB_NAME"
@@ -21,6 +16,7 @@ function init_db() {
 }
 
 function init_user() {
+  check_psql
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD'"
 }
 
@@ -56,12 +52,22 @@ function restore() {
   fi
 }
 
-function showHelp() {
+function check_psql() {
+  if ! command -v psql > /dev/null 2>&1; then
+    echo "psql is not available. Please install PostgreSQL."
+    exit 1
+  fi
+}
+
+function show_help() {
   echo """
 Usage: Manipulating database 
   ./database.sh [COMMAND] [OPTION]
 
-NOTE: You should change the value in ./common/database-env.sh
+NOTE: You should change the value in /scripts/common/database-env.sh
+
+REQUIREMENTS: 
+  - Postgres
 
 Dump
   ./database.sh dump
@@ -96,7 +102,7 @@ elif [ "$COMMAND" = "initial-db" ] ; then
 elif [ "$COMMAND" = "initial-user" ] ; then
   init_user
 elif [ "$COMMAND" = "help" ] ; then
-  showHelp
+  show_help
 else
   ./database.sh help 
 fi
