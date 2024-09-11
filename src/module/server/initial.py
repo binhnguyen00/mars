@@ -2,8 +2,9 @@ import yaml
 
 from flask import Flask;
 from flask_cors import CORS;
+from src.app.context import APP_CONFIG_DIR
 
-with open('src/app/config/application.yaml', 'r') as file:
+with open(APP_CONFIG_DIR, 'r') as file:
   config = yaml.safe_load(file)
 
 sqlalchemy    = config['flask']['sqlalchemy']
