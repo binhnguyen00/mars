@@ -1,7 +1,3 @@
-# Component Scan
-import src.module.image.controlller;  
-import src.module.archive.controller;
-
 from src.module.server.service import run_server;
 
 if __name__ == '__main__':

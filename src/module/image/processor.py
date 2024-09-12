@@ -4,15 +4,15 @@ import imageio
 from PIL import Image
 from src.app.context import (IMG_RESULT_DIR, IMG_UPLOAD_DIR)
 
-def sort(image_format: str) -> str:
+def switcher(image_format: str) -> str:
   image_format = image_format.strip().lower()
-  switcher = {
+  scenario = {
     "jpg": "process_image_jpg",
   }
-  return switcher.get(image_format, "default")
+  return scenario.get(image_format, "default")
 
 def process_image(image_path: str, image_format: str):
-  sorted = sort(image_format)
+  sorted = switcher(image_format)
   result: None | str
   if sorted == "default":
     result = _process_image_default(image_path, image_format)

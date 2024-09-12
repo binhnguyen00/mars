@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy;
 from sqlalchemy import (Column, DateTime, Integer, func);
 from sqlalchemy.orm import DeclarativeBase;
-from src.module.server.initial import server
+from src.module.server.initial import server;
 
 class BaseMixin:
   __abstract__ = True
