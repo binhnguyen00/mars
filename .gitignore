@@ -9,4 +9,4 @@
 **/pnpm-lock.yaml
 **/database-env.sh
 
-src/module/image/resources
+**/storage
