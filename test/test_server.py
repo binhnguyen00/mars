@@ -2,7 +2,7 @@ import os
 import unittest
 import requests
 
-from server.service import run_server
+from image.service import run_server
 
 class TestServer(unittest.TestCase):
 
