@@ -20,8 +20,14 @@ def upload_image(request: Request):
     file_path = os.path.join(IMG_UPLOAD_DIR, file.filename)
     file.save(file_path)
     result_image = ImgProcessor.process_image(file_path, format)
-    response = send_file(result_image, as_attachment=True)
-    return response
+    if result_image is not None:
+      response = send_file(result_image, as_attachment=True)
+      return response
+    else:
+      return jsonify({
+        'error': 'Failed to process image'
+      }), 500
+
 
 def get_image(image_name):
   directory = os.path.join(IMG_RESULT_DIR, image_name)
