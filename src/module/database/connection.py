@@ -1,4 +1,4 @@
-from src.module.database.db import db
+from src.module.database.initial import db
 
 class DBConnectionUtils():
 

@@ -1,5 +1,5 @@
 from sqlalchemy import (Column, String)
-from src.module.database.db import Base
+from src.module.database.initial import Base
 
 class Archive(Base):
   __tablename__ = 'archive'
