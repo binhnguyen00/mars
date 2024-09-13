@@ -13,9 +13,9 @@ def create_result_folder():
 def create_storing_folder():
   os.makedirs(IMG_UPLOAD_DIR, exist_ok=True)
 
-def save_image(image_file): 
+def save_uploaded_image(image_file): 
   try:
-    image_name, image_ext = image_file.filename.rsplit('.', 1) # ('image', 'jpg')
+    image_name, image_ext = image_file.filename.rsplit('.', 1) # ('5fa0e1735ab848c08', 'jpg')
     image_unique_name = uuid.uuid4().hex
     image_path = os.path.join(IMG_UPLOAD_DIR, f"{image_unique_name}.{image_ext}")
 
@@ -23,10 +23,10 @@ def save_image(image_file):
     image_file.save(image_path)
 
     # Save on database
-    image = Image(name=image_unique_name, path=image_path)
+    image = Image(name=image_unique_name)
     DatabaseConnect.insert(image)
 
-    return image_path
+    return image_unique_name, image_ext
 
   except RuntimeError as e:
     print(f"An error occurred: {e}")
@@ -39,42 +39,61 @@ def switch_method(image_format: str) -> str:
   }
   return scenario.get(image_format, "process_image_default")
 
-def process_image(image_path: str, image_format: str):
-  scenario = switch_method(image_format)
+def process_image(image_unique_name: str, origin_format: str, target_format: str):
+  scenario = switch_method(target_format)
   if (scenario == "process_image_default"): 
-    result = _process_image_default(image_path, image_format)
+    result = _process_image_default(image_unique_name, origin_format, target_format)
   elif (scenario == "process_image_jpg"): 
-    result = _process_image_jpg(image_path)
+    result = _process_image_jpg(image_unique_name, origin_format)
+  else: 
+    result = None
   return result
 
-def _process_image_default(image_path: str, image_format: str):
-  destination = _find_destination(image_path, image_format)
+def _process_image_default(image_unique_name: str, origin_format: str, target_format: str):
+  origin_format = origin_format.strip().lower()
+  target_format = target_format.strip().lower()
+  origin      = os.path.join(IMG_UPLOAD_DIR, f"{image_unique_name}.{origin_format}")
+  destination = os.path.join(IMG_RESULT_DIR, f"{image_unique_name}.{target_format}")
 
   try:
-    source = PILImage.open(image_path)
-    if source.mode == 'RGBA': # If the image has an alpha channel (RGBA), convert it to RGB
-      source = source.convert('RGB')
-    source.save(destination, format=image_format.upper())
-    print(f"Image saved successfully to {destination}")
+    image = PILImage.open(origin)
+    # If the image has an alpha channel (RGBA), convert it to RGB
+    if image.mode == 'RGBA': 
+      image = image.convert('RGB')
+    # Save on disk
+    image.save(destination, format=target_format.upper())
+    # Save on database
+    image = Image.get_by_name(image_unique_name)
+    if image:
+      image.result_format = target_format # type: ignore
+      image.upload_format = origin_format # type: ignore
+      DatabaseConnect.commit()
+
     return destination
+
   except RuntimeError as e:
     print(f"An error occurred: {e}")
     return None
 
-def _process_image_jpg(image_path: str):
-  destination = _find_destination(image_path, "jpg")
+def _process_image_jpg(image_unique_name: str, origin_format: str):
+  origin_format = origin_format.strip().lower()
+  target_format = "jpg"
+  origin      = os.path.join(IMG_UPLOAD_DIR, f"{image_unique_name}.{origin_format}")
+  destination = os.path.join(IMG_RESULT_DIR, f"{image_unique_name}.{target_format}")
 
   try:
-    image = imageio.imread(image_path)
-    imageio.imwrite(uri=destination, im=image)
-    print(f"Image saved successfully to {destination}")
+    image = imageio.imread(origin)
+    # Save on disk
+    imageio.imwrite(uri=destination, im=image) 
+    # Save on database
+    image = Image.get_by_name(image_unique_name)
+    if image:
+      image.result_format = target_format # type: ignore
+      image.upload_format = origin_format # type: ignore
+      DatabaseConnect.commit()
+
     return destination
+
   except RuntimeError as e:
     print(f"An error occurred: {e}")
     return None
-
-def _find_destination(image_path: str, image_format: str):
-  image_name, image_ext = os.path.basename(image_path).rsplit('.', 1) # ('image', 'jpg')
-  image_format = image_format.strip().lower()
-  destination = os.path.join(IMG_RESULT_DIR, f"{image_name}.{image_format}")
-  return destination
