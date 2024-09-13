@@ -19,7 +19,7 @@ def save_image(image_file):
     image_unique_name = uuid.uuid4().hex
     image_path = os.path.join(IMG_UPLOAD_DIR, f"{image_unique_name}.{image_ext}")
 
-    # Save on server storage
+    # Save on disk
     image_file.save(image_path)
 
     # Save on database
@@ -32,7 +32,7 @@ def save_image(image_file):
     print(f"An error occurred: {e}")
     return None
 
-def switcher(image_format: str) -> str:
+def switch_method(image_format: str) -> str:
   image_format = image_format.strip().lower()
   scenario = {
     "jpg": "process_image_jpg",
@@ -40,14 +40,12 @@ def switcher(image_format: str) -> str:
   return scenario.get(image_format, "process_image_default")
 
 def process_image(image_path: str, image_format: str):
-  sorted = switcher(image_format)
-  result = None
-  if sorted == "process_image_default": 
+  scenario = switch_method(image_format)
+  if (scenario == "process_image_default"): 
     result = _process_image_default(image_path, image_format)
-  elif sorted == "process_image_jpg": 
+  elif (scenario == "process_image_jpg"): 
     result = _process_image_jpg(image_path)
   return result
-
 
 def _process_image_default(image_path: str, image_format: str):
   destination = _find_destination(image_path, image_format)
