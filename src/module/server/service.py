@@ -11,4 +11,5 @@ def run_server(debug=False, host='0.0.0.0', port=5000):
   with server.app_context():
     db.create_all()
     print("Tables created successfully")
+    
   server.run(debug=debug, host=host, port=port)

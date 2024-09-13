@@ -7,12 +7,6 @@ from PIL import Image as PILImage;
 from src.app.context import (IMG_RESULT_DIR, IMG_UPLOAD_DIR);
 from src.module.image.entity import Image;
 
-def create_result_folder():
-  os.makedirs(IMG_RESULT_DIR, exist_ok=True)
-
-def create_storing_folder():
-  os.makedirs(IMG_UPLOAD_DIR, exist_ok=True)
-
 def save_uploaded_image(image_file): 
   try:
     image_name, image_ext = image_file.filename.rsplit('.', 1) # ('img_name_from_client', 'jpg')
