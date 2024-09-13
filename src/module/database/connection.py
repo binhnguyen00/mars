@@ -1,17 +1,15 @@
 from src.module.database.initial import db
 
-class DBConnectionUtils():
+def commit():
+  db.session.commit()
 
-  def commit(self):
-    db.session.commit()
+def rollback():
+  db.session.rollback()
 
-  def rollback(self):
-    db.session.rollback()
+def insert(obj):
+  db.session.add(obj)
+  commit()
 
-  def insert(self, obj):
-    db.session.add(obj)
-    self.commit()
-
-  def delete(self, obj):
-    db.session.delete(obj)
-    self.commit()
+def delete(obj):
+  db.session.delete(obj)
+  commit()
