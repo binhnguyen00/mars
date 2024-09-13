@@ -16,6 +16,7 @@ pyyaml = "^6.0.2"
 psycopg2-binary = "^2.9.9"
 requests = "^2.32.3"
 imageio = "^2.35.1"
+uuid = "^1.30"
 
 
 [build-system]
