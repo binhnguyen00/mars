@@ -5,7 +5,7 @@ import src.module.database.connection as DatabaseConnect;
 
 from PIL import Image as PILImage;
 from src.app.context import (IMG_RESULT_DIR, IMG_UPLOAD_DIR);
-from src.module.image.table.image import Image;
+from src.module.image.entity import Image;
 
 def create_result_folder():
   os.makedirs(IMG_RESULT_DIR, exist_ok=True)
@@ -15,7 +15,7 @@ def create_storing_folder():
 
 def save_uploaded_image(image_file): 
   try:
-    image_name, image_ext = image_file.filename.rsplit('.', 1) # ('5fa0e1735ab848c08', 'jpg')
+    image_name, image_ext = image_file.filename.rsplit('.', 1) # ('img_name_from_client', 'jpg')
     image_unique_name = uuid.uuid4().hex
     image_path = os.path.join(IMG_UPLOAD_DIR, f"{image_unique_name}.{image_ext}")
 

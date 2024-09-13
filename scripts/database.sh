@@ -1,11 +1,11 @@
 # Ensure database env
 if [ ! -f "$CURRENT_DIR/common/database-env.sh" ]; then 
   cp ./common/database-env.sh.sample ./common/database-env.sh
-  check_psql
 fi
 
 source ./common/utils.sh
 source ./common/database-env.sh
+check_psql
 
 function init_user() {
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD'"
@@ -58,7 +58,11 @@ function restore() {
 
 function check_psql() {
   if ! command -v psql > /dev/null 2>&1; then
-    echo "psql is not available. Please install PostgreSQL."
+    echo """
+IMPORTANT:
+psql is not available. Please install PostgreSQL in order to use this script.
+https://www.postgresql.org/download/
+    """
     exit 1
   fi
 }
