@@ -17,9 +17,9 @@ def upload_image(request: Request):
     }), 400
   else:
     format = request.form.get('format') or 'PNG'
-    file_path = os.path.join(IMG_UPLOAD_DIR, file.filename)
-    file.save(file_path)
-    result_image = ImgProcessor.process_image(file_path, format)
+    file_path = ImgProcessor.save_image(file)
+    if file_path is not None:
+      result_image = ImgProcessor.process_image(file_path, format)
     if result_image is not None:
       response = send_file(result_image, as_attachment=True)
       return response
