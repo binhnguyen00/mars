@@ -1,11 +1,11 @@
+source ./common/utils.sh
+
 # Ensure database env
 if [ ! -f "$CURRENT_DIR/common/database-env.sh" ]; then 
   cp ./common/database-env.sh.sample ./common/database-env.sh
 fi
 
-source ./common/utils.sh
 source ./common/database-env.sh
-check_psql
 
 function init_user() {
   PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $ADMIN_USER -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD'"
@@ -94,6 +94,7 @@ Initial Admin User & Database
   """
 }
 
+check_psql
 COMMAND=$1;
 if [ -n "$COMMAND" ]; then
   shift
